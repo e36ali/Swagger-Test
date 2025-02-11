@@ -1,0 +1,329 @@
+{
+	"info": {
+		"_postman_id": "676c7e7c-b843-4eed-b513-d8bcc263d82a",
+		"name": "API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42045801",
+		"_collection_link": "https://www.postman.com/e36ali/workspace/notes-api-tests/collection/42045801-676c7e7c-b843-4eed-b513-d8bcc263d82a?action=share&source=collection_link&creator=42045801"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"API is healthy\", function () {\r",
+							"    pm.expect(pm.response.json().status).to.eql(\"OK\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/health-check",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"health-check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Regist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"User ID is returned\", function () {\r",
+							"    pm.expect(pm.response.json().data.id).to.be.a(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Test 1\",\r\n  \"email\": \"test4@testme.com\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Token is returned\", function () {\r",
+							"    pm.expect(pm.response.json().data.token).to.be.a(\"string\");\r",
+							"});\r",
+							"// Save the token for future requests\r",
+							"pm.environment.set(\"authToken\", pm.response.json().data.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test2@testme.com\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the status code is 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Check if the profile information is returned\r",
+							"pm.test(\"Profile information is returned\", function () {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response.success).to.be.true;\r",
+							"    pm.expect(response.data).to.be.an(\"object\");\r",
+							"    pm.expect(response.data).to.have.property(\"id\");\r",
+							"    pm.expect(response.data).to.have.property(\"name\");\r",
+							"    pm.expect(response.data).to.have.property(\"email\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "28cabc93478e4138acdfc8b0913ec1604603d6bd6663414ca29c4dca5454b747",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Test 1\",\r\n  \"email\": \"test3@testme.com\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/profile",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Profile update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the status code is 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Check if the profile is updated\r",
+							"pm.test(\"Profile is updated\", function () {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response.success).to.be.true;\r",
+							"    pm.expect(response.data.name).to.eql(pm.request.body.formData.get(\"name\"));\r",
+							"    if (pm.request.body.formData.get(\"phone\")) {\r",
+							"        pm.expect(response.data.phone).to.eql(pm.request.body.formData.get(\"phone\"));\r",
+							"    }\r",
+							"    if (pm.request.body.formData.get(\"company\")) {\r",
+							"        pm.expect(response.data.company).to.eql(pm.request.body.formData.get(\"company\"));\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "28cabc93478e4138acdfc8b0913ec1604603d6bd6663414ca29c4dca5454b747",
+						"type": "text"
+					},
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Testabc1\",\r\n  \"phone\": \"12345678\",\r\n  \"company\": \"QA testing\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/profile",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "forgot pass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the status code is 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Check if the password reset link was sent successfully\r",
+							"pm.test(\"Password reset link sent successfully\", function () {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response.success).to.be.true;\r",
+							"    pm.expect(response.message).to.include(\"Password reset link successfully sent\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test2@testme.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/forgot-password",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
